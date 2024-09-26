@@ -9,3 +9,7 @@ laragon-portable-env
 7. Run `.\composer-install.cmd`
 8. Run `.\bin\php\php-x.x.xx-Win32-vcxx-x64\start-php-cgi.cmd`
 9. Run `.\laragon.exe`, the default port `:8080` should not collide
+
+
+### PHP
+- [php-8.0.0-Win32-vs16-x64.zip](https://windows.php.net/downloads/releases/archives/php-8.0.0-Win32-vs16-x64.zip)
