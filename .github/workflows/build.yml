@@ -1,0 +1,48 @@
+name: portable-release-actions-workflow
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'c*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      
+permissions:
+    contents: write
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: windows-latest
+    env:
+      targetZip: laragon-php-8.0.0-portable-${{ github.ref_name }}.zip
+      laragonVersion: 6.0.0
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: installer
+        shell: cmd
+        run: |
+          curl https://github.com/leokhoa/laragon/archive/refs/tags/${{ env.laragonVersion }}.zip -L --output laragon.zip &&^
+          7z.exe x laragon.zip &&^
+          rename "laragon-6.0.0" "laragon"
+          dir
+
+      - shell: cmd
+        run: |
+          curl https://windows.php.net/downloads/releases/archives/php-8.0.0-Win32-vs16-x64.zip -L --output php-8.0.0-Win32-vs16-x64.zip &&^
+          7z.exe x php-8.0.0-Win32-vs16-x64.zip -o"laragon\bin\php\php-8.0.0-Win32-vs16-x64" &&^
+          dir
+          
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: "laragon"
+          filename: "${{ env.targetZip }}"
+          
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "laragon/${{ env.targetZip }}"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
