@@ -31,6 +31,8 @@ jobs:
         run: |
           curl https://windows.php.net/downloads/releases/archives/php-8.0.0-Win32-vs16-x64.zip -L --output php-8.0.0-Win32-vs16-x64.zip &&^
           7z.exe x php-8.0.0-Win32-vs16-x64.zip -o"laragon\bin\php\php-8.0.0-Win32-vs16-x64" &&^
+          cd laragon\bin\php\ &&^
+          rmdir /s /q php-5.4.9-nts-Win32-VC9-x86 &&^
           dir
           
       - name: Archive Release
